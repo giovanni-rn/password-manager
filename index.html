@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta n ame="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet" />
+  <!-- <style>* { border: 1px lime solid; }</style> -->
+  <title>Password manager</title>
+</head>
+
+<body class="p-3 bg-gray-900 text-white text-center">
+  <h1 class="text-2xl uppercase">Password manager</h1>
+  <h2 class="mt-8 pl-2 text-xl text-left">Connect to your account</h2>
+  <form class="w-1/1 flex flex-row">
+    <input id="username" placeholder="Username" type="text" class="w-2/3 p-1 m-2 text-black rounded-md" />
+    <input id="signup" type="submit" class="w-1/6 p-2 m-2 text-black rounded-md" value="Sign up" />
+    <input id="login" type="submit" class="w-1/6 p-2 m-2 text-black rounded-md" value="Login" />
+  </form>
+  <h2 class="mt-2 pl-2 text-xl text-left">Save a new password</h2>
+  <form class="w-1/1 flex flex-row">
+    <input id="website" type="text" placeholder="Website" class="w-2/5 p-1 m-2 text-black rounded-md" />
+    <input id="password" type="text" placeholder="Password" class="w-2/5 p-1 m-2 text-black rounded-md" />
+    <input id="save" type="submit" class="w-1/5 p-2 m-2 text-black rounded-md" value="Save" />
+  </form>
+  <h2 class="mt-8 text-xl">All your stored passwords</h2>
+  <ul id="password-list">
+    <li><strong>youtube.com</strong> | <del>bcdui5R6gyxus</del></li>
+    <li><strong>youtube.com</strong> | <del>bcdui5R6gyxus</del></li>
+    <li><strong>youtube.com</strong> | <del>bcdui5R6gyxus</del></li>
+    <li><strong>youtube.com</strong> | <del>bcdui5R6gyxus</del></li>
+    <li><strong>youtube.com</strong> | <del>bcdui5R6gyxus</del></li>
+  </ul>
+  <script src="script.js"></script>
+</body>
+
+</html>
+
+<script src="script.ts"></script>
