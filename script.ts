@@ -2,21 +2,24 @@
 type Input = HTMLInputElement;
 type Button = HTMLButtonElement;
 type List = HTMLUListElement;
+type Span = HTMLSpanElement;
+type ListItem = HTMLLIElement;
 const d: Document = this.document;
 
 // Login form
-const username: Input = d.querySelector("#username") as HTMLInputElement;
-const signup: Button = d.querySelector("#signup") as HTMLButtonElement;
-const login: Button = d.querySelector("#login") as HTMLButtonElement;
+const username: Input = d.querySelector("#username") as Input;
+const signup: Button = d.querySelector("#signup") as Button;
+const login: Button = d.querySelector("#login") as Button;
 // Add form
-const website: Input = d.querySelector("#website") as HTMLInputElement;
-const password: Input = d.querySelector("#password") as HTMLInputElement;
-const save: Button = d.querySelector("#save") as HTMLButtonElement;
+const website: Input = d.querySelector("#website") as Input;
+const password: Input = d.querySelector("#password") as Input;
+const save: Button = d.querySelector("#save") as Button;
 // Passwords list
-const passList: List = d.querySelector("#password-list") as HTMLUListElement;
+const passList: List = d.querySelector("#password-list") as List;
+const currentUserText: Span = d.querySelector("#current-session") as Span;
 
 // Data storage
-const initialUsers = ["nono", "bob", "poulet"];
+const initialUsers: string[] = ["nono", "bob", "poulet"];
 const users: Set<string> = new Set(initialUsers);
 
 type Password = Map<string, string>; // [["url.com", "A"]...]
@@ -49,61 +52,99 @@ const savedPass: SavedPass = new Map([
   ],
 ]);
 
-savedPass.forEach((pass: Password, user: string) =>
-  pass.forEach((pass: string, url: string) => console.log(url))
-);
+let currentUser: string;
 
 // Simulate UX
-username.value = "Nono";
-website.value = "youtube.com";
-password.value = "fcyh576FDyfx";
+// username.value = "Nono";
+// website.value = "youtube.com";
+// password.value = "fcyh576FDyfx";
 
-let curentUser: string = "bob";
+/** Removes white spaces around string and set all letters to lower case. */
+const sanitize = (value: string): string => value.trim().toLowerCase();
 
-const log = (iterable: Array<any> | Set<any> | Map<any, any>): void =>
-  iterable.forEach((v: any) => console.log(v));
-
+/** Add the user to users Set, and change the current user to print his saved passwords. */
 const signupUser = (e: Event): void => {
   e.preventDefault();
-  if (username.value === "") return console.log("Please enter your username.");
+  if (username.value === "") return alert("Please enter your username.");
   const initialSize: number = users.size;
-  const newUser: string = username.value;
+  const newUser: string = sanitize(username.value);
   users.add(newUser);
-
   if (users.size === initialSize)
-    return console.log("User already exists, login instead.");
+    return alert("User already exists, login instead.");
   else {
-    users.add(newUser);
-    curentUser = username.value.trim().toLowerCase();
-    reRenderPasswordList();
-    return log(users);
+    currentUser = sanitize(username.value);
+    const newEmptyRecords: Password = new Map([]);
+    savedPass.set(currentUser, newEmptyRecords);
+    renderPasswordList();
+    currentUserText.innerText = currentUser;
   }
 };
 
+/** Change the current user and print his saved passwords. */
 const loginUser = (e: Event): void => {
   e.preventDefault();
-  if (users.has(username.value.trim().toLowerCase())) {
-    curentUser = username.value.trim().toLowerCase();
-    reRenderPasswordList();
-  } else return console.log("This user does not exist, sign up instead.");
+  if (username.value === "") return alert("Please enter your username.");
+  if (users.has(sanitize(username.value))) {
+    currentUser = sanitize(username.value);
+    renderPasswordList();
+    currentUserText.innerText = currentUser.toLowerCase();
+  } else return alert("This user does not exist, sign up instead.");
 };
 
-const reRenderPasswordList = (): void => {
-  passList.innerHTML = "";
-  savedPass.forEach((v, k) => {
-    if (k === curentUser)
-      v.forEach((v, k) => {
-        const newListElem = d.createElement("li");
-        newListElem.innerHTML = `<strong>${k}</strong> | <del>${v}</del>`;
-        passList.appendChild(newListElem);
-      });
-  });
-  d.createElement("li");
+/** Iterate through the Password Map to print the website/password pairs. */
+const renderPasswordList = (): void => {
+  if (currentUser !== "" && currentUserText.innerText !== "") {
+    passList.innerHTML = "";
+    savedPass.forEach((v, k) => {
+      if (k === sanitize(currentUser))
+        v.forEach((v, k) => {
+          const newListElem: ListItem = d.createElement("li");
+          newListElem.innerHTML = `<strong>${k}</strong> | <del>${v}</del>`;
+          passList.appendChild(newListElem);
+        });
+    });
+  }
+  const listEmpty: ListItem = d.createElement("li");
+  listEmpty.innerHTML = "None";
+  if (passList.innerHTML === "") passList.appendChild(listEmpty);
 };
+
+/** Add a website/password pair to the list associated with the current user. */
+const addPassword = (e: Event): void => {
+  e.preventDefault();
+  switch (true) {
+    case currentUser === "" || currentUserText.innerText === "":
+      alert("Please log in before adding a new record.");
+      break;
+    case password.value === "" || website.value === "":
+      alert("Please fill both inputs.");
+      break;
+    case website.value.length < 4 || !website.value.includes("."):
+      alert("Please provide a valid url.");
+      break;
+    case password.value.length < 8:
+      alert("Please provide a longer password.");
+      break;
+    default:
+      savedPass.forEach((v: Password, k: String) => {
+        if (k === currentUser) {
+          const nbPasswords = v.size;
+          v.set(sanitize(website.value), password.value);
+          if (nbPasswords === v.size) alert("Password successfully updated.");
+          else alert("Password successfully added.");
+          renderPasswordList();
+        }
+      });
+      break;
+  }
+};
+
+// Initial user
+// currentUser = "bob";
+// currentUserText.innerText = currentUser;
+renderPasswordList();
 
 // Event listeners
 signup.onclick = (e: Event) => signupUser(e);
 login.onclick = (e: Event) => loginUser(e);
-
-// Check output
-console.log(" ");
+save.onclick = (e: Event) => addPassword(e);

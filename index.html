@@ -11,29 +11,29 @@
 
 <body class="p-3 bg-gray-900 text-white text-center">
   <h1 class="text-2xl uppercase">Password manager</h1>
-  <h2 class="mt-8 pl-2 text-xl text-left">Connect to your account</h2>
+  <h2 class="pl-2 text-xl">Logged in as : <span id="current-session"></span></h2>
+  <h3 class="mt-8 pl-2 text-xl text-left">Connect to your account</h3>
   <form class="w-1/1 flex flex-row">
-    <input id="username" placeholder="Username" type="text" class="w-2/3 p-1 m-2 text-black rounded-md" />
+    <input id="username" placeholder="Username" type="text" class="w-2/3 p-1 m-2 text-black rounded-md"
+      autocomplete="username" />
     <input id="signup" type="submit" class="w-1/6 p-2 m-2 text-black rounded-md" value="Sign up" />
     <input id="login" type="submit" class="w-1/6 p-2 m-2 text-black rounded-md" value="Login" />
   </form>
   <h2 class="mt-2 pl-2 text-xl text-left">Save a new password</h2>
   <form class="w-1/1 flex flex-row">
-    <input id="website" type="text" placeholder="Website" class="w-2/5 p-1 m-2 text-black rounded-md" />
-    <input id="password" type="text" placeholder="Password" class="w-2/5 p-1 m-2 text-black rounded-md" />
+    <input id="website" type="text" placeholder="Website" class="w-2/5 p-1 m-2 text-black rounded-md"
+      autocomplete="url" />
+    <input id="password" type="text" placeholder="Password" class="w-2/5 p-1 m-2 text-black rounded-md"
+      autocomplete="new-password" />
     <input id="save" type="submit" class="w-1/5 p-2 m-2 text-black rounded-md" value="Save" />
   </form>
   <h2 class="mt-8 text-xl">All your stored passwords</h2>
   <ul id="password-list">
-    <li><strong>youtube.com</strong> | <del>bcdui5R6gyxus</del></li>
-    <li><strong>youtube.com</strong> | <del>bcdui5R6gyxus</del></li>
-    <li><strong>youtube.com</strong> | <del>bcdui5R6gyxus</del></li>
-    <li><strong>youtube.com</strong> | <del>bcdui5R6gyxus</del></li>
-    <li><strong>youtube.com</strong> | <del>bcdui5R6gyxus</del></li>
+    <li>None</li>
   </ul>
   <script src="script.js"></script>
 </body>
 
 </html>
 
-<script src="script.ts"></script>
+<!-- <script src="script.ts"></script> -->
